@@ -7,6 +7,7 @@ class ChannelForm extends Component{
     const node  = this.refs.channel;
     const channelName = node.value;
     this.props.addChannel(channelName);
+    node.value  = "";
   }
 
   render(){
