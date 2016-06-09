@@ -1,0 +1,17 @@
+{
+  "name": "rtsupport",
+  "version": "1.0.0",
+  "description": "realtime support frontend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ken Kaiser",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-loader": "^5.3.3",
+    "react": "^15.1.0",
+    "webpack": "^1.13.1"
+  }
+}
