@@ -4,6 +4,7 @@ import ChannelList from './ChannelList.jsx';
 
 class ChannelSection extends Component{
  render(){
+   console.log('channel', this.props);
    return(
     <div className='support panel panel-primary'>
       <div className='panel-heading'>

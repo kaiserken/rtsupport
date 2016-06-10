@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ChannelSection from './channels/ChannelSection.jsx';
 import UserSection from './users/UserSection.jsx';
+import MessageSection from './messages/MessageSection.jsx';
 
 class App extends Component{
   constructor(props){
@@ -9,7 +10,7 @@ class App extends Component{
       channels: [],
       activeChannel: {},
       users: [],
-      activeUser: {}
+      messages: []
     };
   }
 
@@ -26,17 +27,21 @@ class App extends Component{
 
   }
 
-  addUser(name){
+  setUserName(name){
     let {users}  = this.state;
     users.push({id: users.length, name});
     this.setState({users});
     //Todo - send to server
   }
 
-  setUser(activeUser){
-    this.setState({activeUser});
-    // todo get User messages
 
+  addMessage(body){
+    let {messages, users}  = this.state;
+    let createdAt = new Date;
+    let author = users.length > 0 ? users[0].name : 'anonymous';
+    messages.push({id: messages.length, body, createdAt, author});
+    this.setState({messages});
+    //Todo - send to server
   }
 
   render(){
@@ -50,10 +55,13 @@ class App extends Component{
           />
           <UserSection
             {...this.state}
-            addUser= {this.addUser.bind(this)}
-            setUser= {this.setUser.bind(this)}
+            setUserName= {this.setUserName.bind(this)}
           />
         </div>
+        <MessageSection
+          {...this.state}
+          addMessage={this.addMessage.bind(this)}
+        />
       </div>
 
     );
