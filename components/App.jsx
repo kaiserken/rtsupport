@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import ChannelSection from './ChannelSection';
+import ChannelSection from './channels/ChannelSection.jsx';
 
 class App extends Component{
   constructor(props){
     super(props);
     this.state = {
       channels: [],
+      activeChannel: {}
     };
   }
   addChannel(name){
@@ -23,11 +24,16 @@ class App extends Component{
 
   render(){
     return(
-      <ChannelSection
-        channels= {this.state.channels}
-        addChannel= {this.addChannel.bind(this)}
-        setChannel= {this.setChannel.bind(this)}
-      />
+      <div className='app'>
+        <div className='nav'>
+          <ChannelSection
+            {...this.state}
+            addChannel= {this.addChannel.bind(this)}
+            setChannel= {this.setChannel.bind(this)}
+          />
+        </div>
+      </div>
+
     );
   }
 }
