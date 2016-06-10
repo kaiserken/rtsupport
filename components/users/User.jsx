@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class User extends Component{
   render(){
     return (
-      <li className='active'>
+      <li >
           {this.props.user.name}
       </li>
     );

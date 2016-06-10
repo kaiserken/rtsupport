@@ -10,15 +10,33 @@ class App extends Component{
       channels: [],
       activeChannel: {},
       users: [],
-      messages: []
+      messages: [],
+      connected: false
     };
+  }
+  componentDidMount(){
+    let ws = this.ws = new WebSocket('ws://echo.websocket.org');
+
+    console.log("ws", ws);
+  }
+
+  newChannel(channel){
+    let {channels} = this.state;
+    channels.push(channel);
+    this.setState({channels});
   }
 
   addChannel(name){
     let {channels}  = this.state;
-    channels.push({id: channels.length, name});
-    this.setState({channels});
     //Todo - send to server
+    let msg = {
+      name: 'channel add',
+      data: {
+        id: channels.length,
+        name
+      }
+    };
+    this.ws.send(JSON.stringify(msg));
   }
 
   setChannel(activeChannel){
@@ -37,7 +55,7 @@ class App extends Component{
 
   addMessage(body){
     let {messages, users}  = this.state;
-    let createdAt = new Date;
+    let createdAt = new Date();
     let author = users.length > 0 ? users[0].name : 'anonymous';
     messages.push({id: messages.length, body, createdAt, author});
     this.setState({messages});
@@ -45,6 +63,7 @@ class App extends Component{
   }
 
   render(){
+    console.log("app state", this.state)
     return(
       <div className='app'>
         <div className='nav'>
