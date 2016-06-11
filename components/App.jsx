@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ChannelSection from './channels/ChannelSection.jsx';
 import UserSection from './users/UserSection.jsx';
 import MessageSection from './messages/MessageSection.jsx';
-import Socket from '.././socket.js';
+import Socket from '../socket.js';
 
 class App extends Component{
   constructor(props){
@@ -23,9 +23,12 @@ class App extends Component{
     socket.on('user add', this.onAddUser.bind(this));
     socket.on('user edit', this.onEditUser.bind(this));
     socket.on('user remove', this.onRemoveUser.bind(this));
+    socket.on('message add', this.onMessageAdd.bind(this));
   }
   onConnect(){
     this.setState({connected: true});
+    this.socket.emit('channel subscribe');
+    this.socket.emit('channel unsubsribe');
 
   }
   onDisconnect(){
@@ -52,9 +55,15 @@ class App extends Component{
     users = users.filter(user => {
       return user.id !== removeUser.id;
     });
+    this.setState({users});
+  }
+  onMessageAdd(message){
+    let {messages} = this.state;
+    messages.push(message);
+    this.setState({messages});
   }
 
-  newChannel(channel){
+  onAddChannel(channel){
     let {channels} = this.state;
     channels.push(channel);
     this.setState({channels});
@@ -66,29 +75,25 @@ class App extends Component{
 
   setChannel(activeChannel){
     this.setState({activeChannel});
-    // todo get channel messages
+    this.socket.emit('message unsubscribe');
+    this.setState({messages: []});
+    this.socket.emit('message subscribe', {channelId: activeChannel.id});
 
   }
 
   setUserName(name){
-    let {users}  = this.state;
-    users.push({id: users.length, name});
-    this.setState({users});
-    //Todo - send to server
+    this.socket.emit('user edit', {name});
   }
 
 
   addMessage(body){
-    let {messages, users}  = this.state;
-    let createdAt = new Date();
-    let author = users.length > 0 ? users[0].name : 'anonymous';
-    messages.push({id: messages.length, body, createdAt, author});
-    this.setState({messages});
-    //Todo - send to server
+    let {activeChannel}  = this.state;
+    this.socket.emit('message add',
+      {channelId: activeChannel.id, body});
   }
 
   render(){
-    console.log("app state", this.state)
+    console.log("app state", this.state);
     return(
       <div className='app'>
         <div className='nav'>
