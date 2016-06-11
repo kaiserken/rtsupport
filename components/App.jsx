@@ -19,7 +19,7 @@ class App extends Component{
     let socket = this.socket = new Socket();
     socket.on('connect', this.onConnect.bind(this));
     socket.on('disconnect', this.onDisconnect.bind(this));
-    socket.on('channel add', this.addChannel.bind(this));
+    socket.on('channel add', this.onAddChannel.bind(this));
     socket.on('user add', this.onAddUser.bind(this));
     socket.on('user edit', this.onEditUser.bind(this));
     socket.on('user remove', this.onRemoveUser.bind(this));
